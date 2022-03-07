@@ -6,8 +6,8 @@ export default class App extends Component {
 
   setup() {
     this.$state = {
-      moives : [],
-      timer : 0
+      movies : [],
+      searchText : '',
     }
   };
 
@@ -24,17 +24,31 @@ export default class App extends Component {
   }
 
   mounted() {
+    const { moviesTextList , fetchMovies, $state } = this;
     const $autoInput = this.$target.querySelector('[data-component="autocomplete-input"]');
     const $autoList = this.$target.querySelector('[data-component="autocomplete-list"]');
 
     new AutoInput($autoInput, {
-
+      inputValue : $state.searchText,
+      filterMovies : $state.filterMovies,
+      fetchMovies : fetchMovies.bind(this)
     });
 
     new AutoList($autoList, {
-      
-    })
-
-
+      moviesTextList : $state.movies
+    });
   }
+
+  fetchMovies (value) {
+    fetch(`https://5qfov74y3c.execute-api.ap-northeast-2.amazonaws.com/web-front/autocomplete?value=${value}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data,'asdfasdf');
+      this.setState({
+        movies : data
+      })
+    })
+  }
+
+
 }

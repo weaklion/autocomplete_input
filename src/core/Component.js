@@ -22,4 +22,13 @@ export default class Component {
     this.render(); 
     //state가 변경되면 render가 된다.
   }
+
+  addEvent (eventType, selector, callback) {
+    const children = [ ...this.$target.querySelectorAll(selector)];
+    const isTarget = (target) => children.includes(target) || target.closest(selector);
+    this.$target.addEventListener(eventType, event => {
+      if(!isTarget(event.target)) return false;
+      callback(event);
+    })
+  }
 }
