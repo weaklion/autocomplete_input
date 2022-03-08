@@ -111,11 +111,9 @@ hr {
   transition: all 100ms ease;
 }
 
-.autocomplete-list .highlight {
+.autocomplete-list .active {
   background-color: #f06;
 }
-
-
 
 .autocomplete-list {
     position: absolute;
