@@ -8,7 +8,8 @@ export default class App extends Component {
     this.$state = {
       movies : [],
       searchText : '',
-      active : null,
+      activeIndex : 0,
+      activeList : true
     }
   };
 
@@ -20,28 +21,43 @@ export default class App extends Component {
           <div data-component="autocomplete-list"></div>
         </div>
       </section>
-    
     `
   }
 
   mounted() {
-    const {fetchMovies, $state, handleInputEvents } = this;
+    const {fetchMovies, $state, handleInputEvents, setActiveList, setClearState } = this;
     const $autoInput = this.$target.querySelector('[data-component="autocomplete-input"]');
     const $autoList = this.$target.querySelector('[data-component="autocomplete-list"]');
-
     new AutoInput($autoInput, {
-      inputValue : $state.searchText,
+      searchText : $state.searchText,
       filterMovies : $state.filterMovies,
-      active : $state.active,
+      setActiveList : setActiveList.bind(this),
+      setClearState : setClearState.bind(this),
       handleInputEvents : handleInputEvents.bind(this),
       fetchMovies : fetchMovies.bind(this)
     });
 
     new AutoList($autoList, {
-      moviesTextList : $state.movies
+      movies : $state.movies,
+      activeIndex : $state.activeIndex,
+      activeList : $state.activeList,
     });
   }
 
+  setActiveList(value) {
+    this.setState({
+      activeList : value
+    })
+  }
+
+  setClearState(){
+    this.setState({
+      movies : [],
+      searchText : '',
+    })
+  }
+
+  
   handleInputEvents(event) {
     let keyCodes = {
       'ARROW_DOWN': 40,
@@ -51,46 +67,34 @@ export default class App extends Component {
     let action = Object.keys(keyCodes).find
     (key => keyCodes[key] === event.keyCode);
 
-    const active = this.$state.active;
+    const activeIndex = this.$state.activeIndex;
 
-    console.log(action,'action');
     switch(action) {
       case 'ARROW_DOWN' : //down
       case 'ARROW_UP' : //up
-        if(!active) {
+
+
+        if((this.$state.movies.length === (activeIndex + 1 )) && action === 'ARROW_DOWN'
+        || (activeIndex === 0 && action === 'ARROW_UP')) {
           this.setState({
-            active : 0
+            activeIndex : 0
           })
+          break;
         }
 
-        if((this.$state.movies.length === (active + 1 )) && action === 'ARROW_DOWN'
-          || (active === 0 && action === 'ARROW_UP')) {
-            this.setState({
-              active : 0
-            })
-          }
-
-          this.setState({
-            active : action === 'ARROW_UP'? active - 1 : active + 1
-          });
-      
-      case 'ENTER' : //enter
-        if(!active) {
-          this.setState({
-            active : 0
-          })
-        }
-        return 
+        this.setState({
+          activeIndex : action === 'ARROW_UP'? activeIndex - 1 : activeIndex + 1
+        });
+        return ; 
       default :
-      return ;
+        return ;
     }
   }
-
   fetchMovies (value) {
     fetch(`https://5qfov74y3c.execute-api.ap-northeast-2.amazonaws.com/web-front/autocomplete?value=${value}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data,'asdfasdf');
+
       this.setState({
         movies : data,
         searchText : value
@@ -98,5 +102,5 @@ export default class App extends Component {
     })
   }
 
-
 }
+

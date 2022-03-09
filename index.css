@@ -136,3 +136,28 @@ hr {
         }
     } */
 }
+
+
+
+/* 버튼 내부 x  */
+.inputWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.inputWrap input {
+padding-right: 30px;
+}
+
+.inputWrap .btnClear {
+position: absolute;
+top: 8%;
+right: 1%;
+width: 50px;
+height: 50px;
+background: url(https://img.icons8.com/pastel-glyph/2x/cancel.png) center center no-repeat;
+background-size: 50%;
+border: none;
+outline: none;
+cursor: pointer;
+}
