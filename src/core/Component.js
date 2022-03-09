@@ -1,3 +1,5 @@
+import { updateElement } from './updateElement.js';
+
 export default class Component {
   $target;
   $props;
@@ -6,15 +8,27 @@ export default class Component {
     this.$target = $target;
     this.$props = $props;
     this.setup();
-    this.setEvent();
     this.render();
+  
   }
   setup () {};
   mounted () {};
   template () { return ; }
   render () {
-    this.$target.innerHTML = this.template();
-    this.mounted ();
+    const { $target } = this;
+
+    //기존 node를 복제하고 새로운 탬플릿에 채워 넣음.
+    const newNode = $target.cloneNode(true);
+    newNode.innerHTML = this.template();
+
+    //diff 알고리즘
+    const oldChildNodes = [...$target.childNodes] ;
+    const newChildNodes = [...newNode.childNodes];
+    const max = Math.max(oldChildNodes.length, newChildNodes.length);
+    for(let i=0; i < max ; i++) {
+      updateElement($target, newChildNodes[i], oldChildNodes[i]);
+    }
+    this.mounted();
   }
   setEvent() {}
   setState (newState) {
