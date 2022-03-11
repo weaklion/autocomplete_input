@@ -90,8 +90,8 @@ export default class App extends Component {
         return ;
     }
   }
-  fetchMovies (value) {
-    fetch(`https://5qfov74y3c.execute-api.ap-northeast-2.amazonaws.com/web-front/autocomplete?value=${value}`)
+  fetchMovies () {
+    fetch(`https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json`)
     .then((res) => res.json())
     .then((data) => {
 
