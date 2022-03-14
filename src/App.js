@@ -58,6 +58,7 @@ export default class App extends Component {
   }
 
   setActiveIndex(index) {
+    console.log(index,'asdfawsdfsadfsadf')
     this.setState({
       activeIndex : index,
     })

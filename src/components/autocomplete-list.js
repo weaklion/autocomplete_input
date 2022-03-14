@@ -8,9 +8,9 @@ export default class AutoList extends Component {
     return `<ul class="autocomplete-list" style="visibility:${ activeList ? 'visible' : 'hidden'}">
       ${result.map((el,idx) => `
         <li 
-          key="${idx}"
+          data-key="${idx}"
           class="${ idx === activeIndex ? 'active' : ''}"
-          id="result-item"
+          id="list-item"
         >
           ${el.city} 
         </li>`
@@ -22,8 +22,8 @@ export default class AutoList extends Component {
 
     const { setActiveIndex } = this.$props;
 
-    this.addEvent('click', '#result-item', ({target}) => {
-      console.log(target.key,'target');
+    this.addEvent('click', '#list-item', ({target}) => {
+      setActiveIndex(target.dataset.key*1);
     })
   }
 

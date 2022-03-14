@@ -82,33 +82,9 @@ hr {
   transform: scale(0.875) translateY(-12px);
 }
 
-
-.autocomplete-list .list-item .name {
-  display: block;
-  color: #f06;
-  padding-bottom: 5px;
-}
-
-.autocomplete-list .list-item .title {
-  display: block;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.autocomplete-list .list-item img {
-  height: 48px;
-  vertical-align: top;
-  float: left;
-  padding-right: 10px;
-}
-
-.autocomplete-list .list-item a {
-  display: block;
-  padding: 1em;
-  color: #999;
-  text-decoration: none;
-  transition: all 100ms ease;
+.autocomplete-list #list-item {
+  padding: 4px;
+  cursor: default;
 }
 
 .autocomplete-list .active {
