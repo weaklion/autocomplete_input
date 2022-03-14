@@ -120,10 +120,11 @@ hr {
     list-style-type: none;
     background: #fff;
     width: 100%;
+    overflow: auto;
     margin-top: 4px;
     box-shadow: 0 0 10px #ddd;
     border-top: 1px solid #ddd;
-    
+    height: 100%;
     transition: all 300ms ease-out;
     transform: scale(1) translateY(0);
     transform-origin: center center;        

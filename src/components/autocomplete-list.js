@@ -4,27 +4,27 @@ export default class AutoList extends Component {
 
 
   template() {
-    const { movies, activeIndex ,activeList } = this.$props;
+    const { result, activeIndex ,activeList } = this.$props;
     return `<ul class="autocomplete-list" style="visibility:${ activeList ? 'visible' : 'hidden'}">
-      ${movies.map((el,idx) => `
+      ${result.map((el,idx) => `
         <li 
           key="${idx}"
           class="${ idx === activeIndex ? 'active' : ''}"
+          id="result-item"
         >
-          ${el.text} 
+          ${el.city} 
         </li>`
       ).join(' ')}
     </ul>`
   }
 
-  setActiveList(value) {
-    this.setState({
-      activeList : value
-    })
-  }
-
   setEvent() {
-    
+
+    const { setActiveIndex } = this.$props;
+
+    this.addEvent('click', '#result-item', ({target}) => {
+      console.log(target.key,'target');
+    })
   }
 
 }

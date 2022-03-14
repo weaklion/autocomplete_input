@@ -6,10 +6,10 @@ export default class App extends Component {
 
   setup() {
     this.$state = {
-      movies : [],
+      result : [],
       searchText : '',
       activeIndex : 0,
-      activeList : true
+      activeList : false
     }
   };
 
@@ -25,12 +25,11 @@ export default class App extends Component {
   }
 
   mounted() {
-    const {fetchMovies, $state, handleInputEvents, setActiveList, setClearState } = this;
+    const {fetchMovies, $state, handleInputEvents, setActiveList, setClearState, setActiveIndex } = this;
     const $autoInput = this.$target.querySelector('[data-component="autocomplete-input"]');
     const $autoList = this.$target.querySelector('[data-component="autocomplete-list"]');
     new AutoInput($autoInput, {
       searchText : $state.searchText,
-      filterMovies : $state.filterMovies,
       setActiveList : setActiveList.bind(this),
       setClearState : setClearState.bind(this),
       handleInputEvents : handleInputEvents.bind(this),
@@ -38,9 +37,10 @@ export default class App extends Component {
     });
 
     new AutoList($autoList, {
-      movies : $state.movies,
+      result : $state.result,
       activeIndex : $state.activeIndex,
       activeList : $state.activeList,
+      setActiveIndex : setActiveIndex.bind(this),
     });
   }
 
@@ -52,8 +52,14 @@ export default class App extends Component {
 
   setClearState(){
     this.setState({
-      movies : [],
+      result : [],
       searchText : '',
+    })
+  }
+
+  setActiveIndex(index) {
+    this.setState({
+      activeIndex : index,
     })
   }
 
@@ -74,7 +80,7 @@ export default class App extends Component {
       case 'ARROW_UP' : //up
 
 
-        if((this.$state.movies.length === (activeIndex + 1 )) && action === 'ARROW_DOWN'
+        if((this.$state.result.length === (activeIndex + 1 )) && action === 'ARROW_DOWN'
         || (activeIndex === 0 && action === 'ARROW_UP')) {
           this.setState({
             activeIndex : 0
@@ -90,14 +96,21 @@ export default class App extends Component {
         return ;
     }
   }
-  fetchMovies () {
+
+  filterData(data, searchText) {
+    console.log(data,'data)');
+    return data.filter((x) => x.city.toLowerCase().includes(searchText.toLowerCase()));
+  }
+
+  fetchMovies (value) {
     fetch(`https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json`)
     .then((res) => res.json())
     .then((data) => {
-
+      const filterData = this.filterData(data, value);
       this.setState({
-        movies : data,
-        searchText : value
+        result : filterData,
+        searchText : value,
+        activeList : true,
       })
     })
   }
